@@ -12,10 +12,10 @@
 #include"metal.h"
 using namespace std;
 
-const int nx = 10;
-const int ny = 5;
+const int nx = 1000;
+const int ny = 500;
 
-const int ns = 1;
+const int ns = 25;
 
 float max_r = 255.99;
 float max_g = 255.99;
@@ -32,8 +32,16 @@ const vec3 tri_3(0.1, -0.1, -0.3);
 
 const vec3 tri_4(-1.5, 0.5, -1.5);
 const vec3 tri_5(1.5, 0.3, -1.5);
-const vec3 tri_6(0.1, -0.1, -0.3);
+const vec3 tri_6(0.1, -0.3, -0.5);
 
+
+float gen_back(float t){
+    if (t>=0 && t<1) return 1;
+    else if (t>=1 && t<2) return 0;
+    else if (t>=2 && t<3) return 2;
+    t = t-3;
+    return gen_back(t);
+}
 
 vec3 color(const ray &r, hitable *world, int depth){
     hit_record rec;
@@ -50,11 +58,16 @@ vec3 color(const ray &r, hitable *world, int depth){
     }
 
     vec3 unit_direction = unit_vector(r.direction());
-    float j = 0.5*(unit_direction.y()+1);
-    float k = 0.5*(unit_direction.x()+1);
+    float j = 50*(unit_direction.y()+1);
+    float k = 50*(unit_direction.x()+1);
     float l = 0.5*(unit_direction.z()+1);
-
-    return vec3((1-k)*0.1,(1-j)*0.1,(1-l)*0.1)+vec3(k*1, j*0.5, l*1);
+    float q = gen_back(j);
+    float w = gen_back(k);
+    if (q == 1.0 && w == 1.0) return vec3(1, 0, 0);
+    if (q == 2.0 && w == 2.0) return vec3(0, 1, 0);
+    if (q == 0.0 && w == 0.0) return vec3(0, 0, 1);
+    else return vec3(1, 1, 1);
+//    return 0.8*(vec3((1-k)*0.1,(1-j)*0.1,(1-l)*0.1)+vec3(k*1, j*0.5, l*1))+0.2;
 } 
 
 
@@ -63,10 +76,10 @@ int main(){
     outfile.open("1.ppm", ios::out);
     outfile<<"P3\n"<<nx<<" "<<ny<<"\n255\n";
     hitable *list[5];
-    list[0] = new sphere(vec3(0, 0, -1), 0.5, new metal(vec3(0.5, 0.5, 0.5)));
+    list[0] = new sphere(vec3(0, 0, -1), 0.5, new lambertian(vec3(0.5, 0.5, 0.5)));
     list[1] = new sphere(vec3(0,-100.5,-1), 100, new metal(vec3(0.5, 0.5, 0.5)));
     list[2] = new triangle(tri_1, tri_2, tri_3, new lambertian(vec3(1, 1, 1)));
-    list[3] = new triangle(tri_4, tri_5, tri_6, new metal(vec3(1, 1, 1)));
+    list[3] = new triangle(tri_4, tri_5, tri_6, new metal(vec3(0.5, 0.5, 0.5)));
     list[4] = new sphere(vec3(-1.5, 0, -1), 0.5, new metal(vec3(0.5, 0.5, 0.5)));
     hitable *world = new hitable_list(list, 5);
 
@@ -77,8 +90,8 @@ int main(){
             vec3 col(0, 0, 0);
 //            cout<<i<<","<<j<<"     ";
             for(int pp = 0; pp<ns; pp++){
-                float random = rand()%(100)/(float)(100);
-
+                float random = (rand()%(100)/(float)(100))/5;
+//            if (i>= 66 && i<=74 && j>=20 && j<=25){
                 float u = float(i+random)/float(nx);
                 float v = float(j+random)/float(ny);
                 ray ra = cam.get_ray(u, v);
