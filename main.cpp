@@ -6,6 +6,7 @@
 #include"hitable.h"
 #include"sphere.h"
 #include"tri.h"
+#include"camera.h"
 using namespace std;
 
 const int nx = 200;
@@ -55,12 +56,21 @@ int main(){
     list[3] = new triangle(tri_4, tri_5, tri_6);
     hitable *world = new hitable_list(list, 4);
 
+    camera cam;
+
     for(int j = ny-1; j >= 0; j--){
         for(int i = 0; i <= nx-1; i++){
-            float u = float(i)/float(nx);
-            float v = float(j)/float(ny);
-            ray ra(origin, lower_left_corner+ u*horizontal+ v*vertical);
-            vec3 col = color(ra, world);
+            vec3 col(0, 0, 0);
+            for(int pp = 0; pp<100; pp++){
+                float random = rand()%(100)/(float)(100);
+
+                float u = float(i+random)/float(nx);
+                float v = float(j+random)/float(ny);
+                ray ra = cam.get_ray(u, v);
+                col = color(ra, world)+col;               
+            }
+            col = col / 100;
+
 
 
             int r = int(max_r * col[0]);
