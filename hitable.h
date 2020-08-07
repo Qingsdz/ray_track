@@ -8,6 +8,8 @@ struct hit_record{
     vec3 p;
     vec3 normal;
     int type;
+    vec3 col;
+
 };
 
 class hitable{

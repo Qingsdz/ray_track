@@ -44,11 +44,15 @@ bool triangle::hit(const ray &r, float t_min, float t_max, hit_record &rec) cons
 
     float invdet = 1/det;
     t = t*invdet;
+    vec3 mcol(255.99,255.99,255.99);
+    vec3 col(255,240,255);
     if (t>t_min && t<t_max){
         rec.p = r.point_at_parameter(t);
         rec.t = t;
-        rec.normal = vec3(u*invdet, v*invdet, t);
-        rec.type = 1;
+        vec3 raw_normal = cross(E1, E2);
+        rec.normal = vec3(unit_vector(raw_normal));
+        rec.col = col/mcol;
+        
         return 1;
     }
     return 0;
