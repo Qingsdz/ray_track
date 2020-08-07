@@ -2,11 +2,12 @@
 #define TRI_H
 
 #include "hitable.h"
+#include "material.h"
 
 class triangle: public hitable{
 public:
     triangle(){}
-    triangle(vec3 v_0, vec3 v_1, vec3 v_2):v0(v_0), v1(v_1), v2(v_2){}
+    triangle(vec3 v_0, vec3 v_1, vec3 v_2, material *m):v0(v_0), v1(v_1), v2(v_2), ma(m){}
 
     virtual bool hit(const ray &r, float t_min, float t_max, hit_record &rec) const;
 
@@ -14,6 +15,7 @@ public:
     vec3 v0;
     vec3 v1;
     vec3 v2;
+    material *ma;
 };
 
 bool triangle::hit(const ray &r, float t_min, float t_max, hit_record &rec) const {
@@ -52,6 +54,7 @@ bool triangle::hit(const ray &r, float t_min, float t_max, hit_record &rec) cons
         vec3 raw_normal = cross(E1, E2);
         rec.normal = vec3(unit_vector(raw_normal));
         rec.col = col/mcol;
+        rec.mat_ptr = ma;
         
         return 1;
     }
