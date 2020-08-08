@@ -53,8 +53,9 @@ bool triangle::hit(const ray &r, float t_min, float t_max, hit_record &rec) cons
         rec.t = t;
         vec3 raw_normal = cross(E1, E2);
         rec.normal = vec3(unit_vector(raw_normal));
-        rec.col = col/mcol;
+        rec.col = vec3(u*invdet, v*invdet, t);
         rec.mat_ptr = ma;
+        rec.type = 1;
         
         return 1;
     }

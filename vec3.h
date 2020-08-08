@@ -15,7 +15,7 @@ public:
 
     inline float length() const { return sqrt(e[0]*e[0]+e[1]*e[1]+e[2]*e[2]);}
     inline float squared_length() const { return e[0]*e[0]+e[1]*e[1]+e[2]*e[2];}
-//    inline vec3 operator-() const { return vec3(-e[0], -e[1], -e[2]); }
+    inline vec3 operator-() const { return vec3(-e[0], -e[1], -e[2]); }
     inline float & operator[](int i) {return e[i];}
 
     inline void make_unit_vector(){
