@@ -13,30 +13,38 @@
 #include"dieletic.h"
 using namespace std;
 
-const int nx = 200;
-const int ny = 100;
+const int nx = 2000;
+const int ny = 1000;
 
-const int ns = 1;
+const int ns = 100;
 
 float max_r = 255.99;
 float max_g = 255.99;
 float max_b = 255.99;
 
-const vec3 dir(1, 0, 0);
+float dir = 0.4;
 
-const vec3 tri_1(-1.1, 0.9, -4);
-const vec3 tri_2(1.1, 0.8, -4);
-const vec3 tri_3(0, -0.4, -4);
-const vec3 tri_7(-0.1, 0, 0);
+
+const vec3 tri_1(-1.2+dir, 0, -2);
+const vec3 tri_2(1.2+dir, 0, -2);
+const vec3 tri_3(0.1+dir, 0.9, -2);
+const vec3 tri_7(0.5+dir, -0.3, -1.3);
 const vec3 center((tri_1+tri_2+tri_3+tri_7)/4);
-
+/*
+const vec3 tri_1(-1.1, 1.3, -2);
+const vec3 tri_2(1.1, 1.2, -2);
+const vec3 tri_3(0, -0.1, -2);
+*/
 const vec3 tri_8(-1.1, 0.9, -5);
 const vec3 tri_9(1.1, 0.8, -5);
-const vec3 tri_10(0, -0.4, -5);
+const vec3 tri_10(0, -0.3, -5);
 
-const vec3 tri_4(0.9, 1.1, -2);
-const vec3 tri_5(2.2, 1.1, 0);
-const vec3 tri_6((tri_4.x()+tri_5.x())/2, -1, -1);
+
+const vec3 tri_4(1.1+dir, 1.1, -4);
+const vec3 tri_5(2.2+dir, 0.8, -0.5);
+const vec3 tri_6((tri_4.x()+tri_5.x())/2+0.1, -1, -2.4);
+const vec3 tri_11((tri_4.x()+tri_5.x())/2+0.1+1.1, -1-0.3, -2.4+3.5);
+
 
 
 float gen_back(float t){
@@ -90,15 +98,15 @@ int main(){
     outfile<<"P3\n"<<nx<<" "<<ny<<"\n255\n";
 //    cout<<"begin";
     hitable *list[8];
-    list[0] = new sphere(vec3(-0.7, 0, 0), 0.5, new dielectric(1.5));
-    list[1] = new sphere(vec3(0,-100.5,-1), 100, new metal(vec3(0.8, 0.8, 0.0), 0.1));
-    list[2] = new triangle(tri_1, tri_2, tri_3, (tri_1+tri_2+tri_3)/3, new lambertian(vec3(0.5, 1, 1)));
- //   list[3] = new triangle(tri_1, tri_2, tri_7, center, new dielectric(1.5));
-//    list[4] = new triangle(tri_1, tri_3, tri_7, center, new dielectric(1.5));
-    list[3] = new triangle(tri_4, tri_5, tri_6, (tri_4+tri_5+tri_6)/3, new metal(vec3(0.5, 0.5, 0.5), 0.0));
-    list[4] = new sphere(vec3(-1.5, 0, -1), 0.5, new lambertian(vec3(0.8, 0.5, 0.1)));
-    
-    hitable *world = new hitable_list(list, 5);
+    list[0] = new sphere(vec3(-0.8, 0, -0.1), 0.3, new dielectric(1.5));
+    list[1] = new sphere(vec3(0,-100.5,-1), 100, new metal(vec3(0.8, 0.8, 0.0), 0.05));
+    list[2] = new triangle(tri_1, tri_2, tri_3, center, new dielectric(1.2));
+    list[3] = new triangle(tri_1, tri_2, tri_7, center, new dielectric(1.2));
+    list[4] = new triangle(tri_1, tri_3, tri_7, center, new dielectric(1.2));
+    list[5] = new triangle(tri_4, tri_5, tri_6, (tri_4+tri_5+tri_6)/3, new metal(vec3(0.8, 0.8, 0.8), 0.0));
+    list[6] = new sphere(vec3(-1.5, 0, -1), 0.5, new lambertian(vec3(0.8, 0.5, 0.1)));
+    list[7] = new triangle(tri_11, tri_5, tri_6, (tri_11+tri_5+tri_6)/3, new metal(vec3(0.8, 0.8, 0.8), 0.0));
+    hitable *world = new hitable_list(list, 8);
 
     /*
     hitable *list[4];
@@ -119,11 +127,11 @@ int main(){
             vec3 col(0, 0, 0);
 //            cout<<"#-#-#-#-#-开始进入第 "<<i<<" "<<j<<" 层循环-#-#-#-#-#"<<endl;
 //            cout<<i<<","<<j<<"     ";
-//            for(int pp = 0; pp<ns; pp++){
-//                float random = (rand()%(100)/(float)(100));
+            for(int pp = 0; pp<ns; pp++){
+                float random = (rand()%(100)/(float)(100));
 //            if (i>= 7 && i<=10&& j>=0 && j<=4){
-                float u = float(i)/float(nx);
-                float v = float(j)/float(ny);
+                float u = float(i+random)/float(nx);
+                float v = float(j+random)/float(ny);
                 ray ra = cam.get_ray(u, v);
 //                cout<<"---得到光线向量-----"<<endl;
 //                debug3(ra.origin());
@@ -131,7 +139,7 @@ int main(){
 //                cout<<endl;
                 col = color(ra, world, 0)+col;
 //                cout << i << " "<< j <<" ";          
- //           }
+            }
 
             col = col / ns;
 
