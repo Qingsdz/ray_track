@@ -15,6 +15,7 @@ public:
 
 
 bool hitable_list::hit(const ray &r, float t_min, float t_max, hit_record &rec) const{
+//    std::cout<<"--进入判断撞击最近距离函数--";
     hit_record temp_rec;
     bool hit_anything = 0;
     float closest_so_far = t_max;
@@ -24,7 +25,9 @@ bool hitable_list::hit(const ray &r, float t_min, float t_max, hit_record &rec) 
             closest_so_far = temp_rec.t;
             rec = temp_rec;
         }
+ //       std::cout<<"是否撞击到 list"<<i<<" "<<hit_anything<<std::endl;
     }
+
     return hit_anything;
 }
 

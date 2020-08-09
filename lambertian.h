@@ -22,7 +22,7 @@ vec3 random_in_unit_sphere(){
 
 bool lambertian::scatter(const ray &r_in, const hit_record &rec, vec3 & attenuation, ray &scattered) const{
     vec3 H = random_in_unit_sphere();
-    scattered = ray(rec.p, rec.normal+H);
+    scattered = ray(rec.p, rec.cross+H, r_in.get_ref_idx());
     vec3 unit_direction;
     if (rec.type == 0){
         unit_direction = rec.normal;

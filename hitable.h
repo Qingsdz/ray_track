@@ -12,6 +12,7 @@ struct hit_record{
     int type;
     vec3 col;
     float ref;
+    vec3 cross;
     material *mat_ptr;
 
 };

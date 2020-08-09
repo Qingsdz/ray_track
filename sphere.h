@@ -17,6 +17,7 @@ public:
 };
 
 bool sphere::hit(const ray &r, float t_min, float t_max, hit_record &rec) const{
+//    std::cout<<"---进入撞击球函数---";
     float a = dot(r.direction(),r.direction());
     vec3 oc = r.origin()-center;
     float b = 2*dot(r.direction(), oc);
@@ -30,9 +31,11 @@ bool sphere::hit(const ray &r, float t_min, float t_max, hit_record &rec) const{
             rec.t = temp;
             rec.p = r.point_at_parameter(temp);
             rec.normal = (rec.p - center)/radius;
+            rec.cross = rec.normal;
             rec.type = 0;
             rec.col = col/mcol;
             rec.mat_ptr = ma;
+//            std::cout<<"撞到球前面---"<<std::endl;
             return true;
         }
         temp = (-b+sqrt(derta))/(2*a);
@@ -40,13 +43,17 @@ bool sphere::hit(const ray &r, float t_min, float t_max, hit_record &rec) const{
             rec.t = temp;
             rec.p = r.point_at_parameter(temp);
             rec.normal = (rec.p - center)/radius;
+            rec.cross = rec.normal;
             rec.type = 0;
             rec.col = col/mcol;
             rec.mat_ptr = ma;
+//            std::cout<<"撞到球后面--"<<std::endl;
             return true;
         }
+//        std::cout<<"避免发生多次反射，强制返回---"<<std::endl;
         return 0;
     }
+//    std::cout<<"未撞击到球----"<<std::endl;
     return 0;
 }
 #endif

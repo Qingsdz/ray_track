@@ -54,13 +54,13 @@ bool dielectric::scatter(const ray &r_in, const hit_record &rec, vec3 &attenuati
     float consine = 0;
     if(dot(r_in.direction(), rec.normal) > 0) {
         outward_normal = -rec.normal;
-        ni_over_nt = ref_idx/air_ref_idx;
+        ni_over_nt = ref_idx/r_in.get_ref_idx();
         consine = dot(r_in.direction(), rec.normal)/(r_in.direction().length()*rec.normal.length());
 
     }
     else{
         outward_normal = rec.normal;
-        ni_over_nt = air_ref_idx/ref_idx;
+        ni_over_nt = r_in.get_ref_idx()/ref_idx;
         consine = -dot(r_in.direction(), rec.normal)/(r_in.direction().length()*rec.normal.length());
 
     }
@@ -71,9 +71,9 @@ bool dielectric::scatter(const ray &r_in, const hit_record &rec, vec3 &attenuati
     }
     else reflect_prob = 1;
     if ((rand()%(100)/(float)(100)) < reflect_prob) {
-        scattered = ray(rec.p, reflected);
+        scattered = ray(rec.p, reflected, r_in.get_ref_idx());
     }
-    else scattered = ray(rec.p, refracted);
+    else scattered = ray(rec.p, refracted, ref_idx);
     return true;
 }
 
