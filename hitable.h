@@ -14,6 +14,7 @@ struct hit_record{
     float ref;
     vec3 cross;
     material *mat_ptr;
+    int bak;
 
 };
 

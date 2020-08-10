@@ -9,7 +9,7 @@
 class dielectric:public material{
 public:
     dielectric(float ri): ref_idx(ri) {}
-    virtual bool scatter(const ray &r_in, const hit_record &rec, vec3 &attenuation, ray &scatter) const;
+    virtual int scatter(const ray &r_in, const hit_record &rec, vec3 &attenuation, ray &scatter) const;
     float ref_idx;
     float air_ref_idx = 1.0;
     float refract_over = 1.0;
@@ -28,7 +28,7 @@ bool refract(const vec3 &v, const vec3 &n, float ni_over_nt, vec3 &refracted){
     
 
 }*/
-bool refract(const vec3& v, const vec3& n, float ni_over_nt, vec3& refracted) {
+int refract(const vec3& v, const vec3& n, float ni_over_nt, vec3& refracted) {
     vec3 uv = unit_vector(v);
     float dt = dot(uv, n);
     float discriminant = 1.0 - ni_over_nt*ni_over_nt*(1-dt*dt);
@@ -46,7 +46,7 @@ float schlick(float cosine, float ref_idx){
     return r0+(1-r0)*pow((1-cosine),5);
 }
 
-bool dielectric::scatter(const ray &r_in, const hit_record &rec, vec3 &attenuation, ray &scattered) const{
+int dielectric::scatter(const ray &r_in, const hit_record &rec, vec3 &attenuation, ray &scattered) const{
     vec3 outward_normal;
     vec3 reflected = reflect(r_in.direction(), rec.normal);
     float ni_over_nt;
@@ -74,7 +74,7 @@ bool dielectric::scatter(const ray &r_in, const hit_record &rec, vec3 &attenuati
         scattered = ray(rec.p, reflected, r_in.get_ref_idx());
     }
     else scattered = ray(rec.p, refracted, ref_idx);
-    return true;
+    return 1;
 }
 
 

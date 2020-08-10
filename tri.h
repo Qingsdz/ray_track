@@ -7,7 +7,12 @@
 class triangle: public hitable{
 public:
     triangle(){}
-    triangle(vec3 v_0, vec3 v_1, vec3 v_2, vec3 cen, material *m):v0(v_0), v1(v_1), v2(v_2), center(cen), ma(m){}
+    triangle(vec3 v_0, vec3 v_1, vec3 v_2, vec3 cen, material *m):v0(v_0), v1(v_1), v2(v_2), ma(m){
+        if (cen.x() == -11){
+            center = (v_0+v_1+v_2)/3;
+        }
+        else center = cen;
+    }
 
     virtual bool hit(const ray &r, float t_min, float t_max, hit_record &rec) const;
 
