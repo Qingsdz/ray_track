@@ -1,3 +1,4 @@
+#include <omp.h>
 #include<iostream>
 #include<fstream>
 #include<limits>
@@ -16,7 +17,7 @@ using namespace std;
 const int nx = 200;
 const int ny = 200;
 
-const int ns = 10;
+const int ns = 100;
 
 float max_r = 255.99;
 float max_g = 255.99;
@@ -119,14 +120,14 @@ int main(){
     int i = 0;
     hitable *list[20];
     list[0] = new sphere(vec3(-0.8, 0, -0.1), 0.3, new dielectric(1.5));
-//    list[1] = new sphere(vec3(0,-100.5,-1), 100, new metal(vec3(0.8, 0.8, 0.0), 0.05));
-    list[1] = new triangle(tri_1, tri_2, tri_3, center, new dielectric(1.2));
-    list[2] = new triangle(tri_1, tri_2, tri_7, center, new dielectric(1.2));
-    list[3] = new triangle(tri_1, tri_3, tri_7, center, new dielectric(1.2));
-    list[4] = new triangle(tri_4, tri_5, tri_6, (tri_4+tri_5+tri_6)/3, new metal(vec3(0.8, 0.8, 0.8), 0.0));
-    list[5] = new sphere(vec3(-1.5, 0, -1), 0.5, new lambertian(vec3(0.8, 0.5, 0.1),0));
-    list[6] = new triangle(tri_11, tri_5, tri_6, (tri_11+tri_5+tri_6)/3, new metal(vec3(0.8, 0.8, 0.8), 0.0));
-//    list[7] = new sphere(vec3(0,0,0), 6, new lambertian(vec3(1, 1, 1),1));
+    list[1] = new sphere(vec3(0,-100.5,-1), 100, new metal(vec3(0.8, 0.8, 0.0), 0.05));
+    list[2] = new triangle(tri_1, tri_2, tri_3, center, new dielectric(1.2));
+    list[3] = new triangle(tri_1, tri_2, tri_7, center, new dielectric(1.2));
+    list[4] = new triangle(tri_1, tri_3, tri_7, center, new dielectric(1.2));
+    list[5] = new triangle(tri_4, tri_5, tri_6, (tri_4+tri_5+tri_6)/3, new metal(vec3(0.8, 0.8, 0.8), 0.0));
+    list[6] = new sphere(vec3(-1.5, 0, -1), 0.5, new lambertian(vec3(0.8, 0.5, 0.1),0));
+    list[7] = new triangle(tri_11, tri_5, tri_6, (tri_11+tri_5+tri_6)/3, new metal(vec3(0.8, 0.8, 0.8), 0.0));
+    list[8] = new sphere(vec3(0,2,0), 0.5, new lambertian(vec3(1, 1, 1),1));
 /*
     vec3 ew(52,93,167);
     vec3 wewe(255,255,255);
@@ -150,8 +151,8 @@ int main(){
 
     list[18] = new triangle(tri_bak_1, tri_bak_4, tri_bak_3, vec3(-11,-11,-11), new lambertian(vec3(1,0,1),0));
     list[19] = new triangle(tri_bak_1, tri_bak_2, tri_bak_3, vec3(-11,-11,-11), new lambertian(vec3(1,0,1),0));
-*/
-    hitable *world = new hitable_list(list,20);
+    */
+    hitable *world = new hitable_list(list,9);
 
     /*
     hitable *list[4];
@@ -167,6 +168,8 @@ int main(){
     hitable *world = new hitable_list(list,4); */
     camera cam(vec3(0,0,2), vec3(0,0,-2),vec3(0,1,0), 85, float(nx)/float(ny));
 //    cout<<"----初始化完成-----"<<endl;
+
+    
     for(int j = ny-1; j >= 0; j--){
         for(int i = 0; i <= nx-1; i++){
             vec3 col(0, 0, 0);
@@ -201,5 +204,6 @@ int main(){
         std::cout<<j<<endl;
 //        cout<<endl;
     }
+    
     outfile.close();
 }
