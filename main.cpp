@@ -13,10 +13,10 @@
 #include"dieletic.h"
 using namespace std;
 
-const int nx = 1000;
-const int ny = 1000;
+const int nx = 200;
+const int ny = 200;
 
-const int ns = 100;
+const int ns = 10;
 
 float max_r = 255.99;
 float max_g = 255.99;
@@ -127,7 +127,7 @@ int main(){
     list[5] = new sphere(vec3(-1.5, 0, -1), 0.5, new lambertian(vec3(0.8, 0.5, 0.1),0));
     list[6] = new triangle(tri_11, tri_5, tri_6, (tri_11+tri_5+tri_6)/3, new metal(vec3(0.8, 0.8, 0.8), 0.0));
 //    list[7] = new sphere(vec3(0,0,0), 6, new lambertian(vec3(1, 1, 1),1));
-
+/*
     vec3 ew(52,93,167);
     vec3 wewe(255,255,255);
     list[11] = new triangle(tri_bak_1, tri_bak_2, tri_bak_11, vec3(-11,-11,-11), new lambertian(ew/wewe,0));
@@ -137,8 +137,8 @@ int main(){
     list[10] = new triangle(tri_bak_44, tri_bak_4, tri_bak_3, vec3(-11,-11,-11), new lambertian(vec3(1,0,1),0)); //右
 
 
-    list[7] = new triangle(tri_bak_33, tri_bak_22, tri_bak_2, vec3(-11,-11,-11), new lambertian(vec3(1,1,1),1));
-    list[8] = new triangle(tri_bak_2, tri_bak_3, tri_bak_33, vec3(-11,-11,-11), new lambertian(vec3(1,1,1),1));
+    list[7] = new triangle(tri_bak_33, tri_bak_22, tri_bak_2, vec3(-11,-11,-11), new lambertian(vec3(1,1,1),0));
+    list[8] = new triangle(tri_bak_2, tri_bak_3, tri_bak_33, vec3(-11,-11,-11), new lambertian(vec3(1,1,1),0));
 
     list[13] = new triangle(tri_bak_44, tri_bak_11, tri_bak_4, vec3(-11,-11,-11), new lambertian(vec3(1,0,0),0));
     list[14] = new triangle(tri_bak_11, tri_bak_4, tri_bak_1, vec3(-11,-11,-11), new lambertian(vec3(1,0,0),0));
@@ -150,7 +150,7 @@ int main(){
 
     list[18] = new triangle(tri_bak_1, tri_bak_4, tri_bak_3, vec3(-11,-11,-11), new lambertian(vec3(1,0,1),0));
     list[19] = new triangle(tri_bak_1, tri_bak_2, tri_bak_3, vec3(-11,-11,-11), new lambertian(vec3(1,0,1),0));
-
+*/
     hitable *world = new hitable_list(list,20);
 
     /*
